@@ -2,6 +2,7 @@
 using ExemploEF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using X.PagedList;
 
 namespace ExemploEF.Controllers
 {
@@ -12,12 +13,15 @@ namespace ExemploEF.Controllers
         {
             context = ctx;
         }
-        public IActionResult Index()
+        public IActionResult Index(int pagina = 1)
         {
             //retorna uma view com todos os produtos
             //o métoto Include carrega a associação com Fabricante
             return View(context.Produtos
-                .Include(f => f.Fabricante));
+                .Include(f => f.Fabricante)
+                //converte o resultado retornado em uma lista paginada
+                //inicando na página 1 e exibindo 3 registros por página
+                .ToPagedList(pagina, 3));
         }
 
         public IActionResult Create()
